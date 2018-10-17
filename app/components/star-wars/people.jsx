@@ -5,7 +5,8 @@ export default class People extends React.Component {
     super(props);
 
     this.state = {
-      people: []
+      people: [],
+      films: []
     };
   }
 
@@ -21,6 +22,12 @@ export default class People extends React.Component {
       }).then((body) => {
         const people = body.results
         component.setState({ people })
+      })
+
+      fetch('http://swapi.co/api/films/') 
+      .then(response => response.json())
+      .then(response => {
+        this.setState({ films : response.results })
       })
   }
 
