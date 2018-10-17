@@ -31,8 +31,22 @@ export default class People extends React.Component {
       })
   }
 
+  // renderFilms(){
+  //   this.state.films.map(film => {
+  //     console.log('film: ', film)
+  //   })
+  //   // return(
+  //   //   <div>
+
+  //   //   </div>
+  //   // )
+  // }
+
   render() {
+
     const people = this.state.people
+    const films = this.state.films
+    
     return (
       <div style={{textAlign: 'center'}}>
         <h1>Star Wars People</h1>
@@ -41,6 +55,17 @@ export default class People extends React.Component {
             <li key={person.url}>{person.name}</li>
           )}
         </ul>
+        <div className="film-list">
+          <h2>Select A Movie</h2>
+          <select>
+            { films.map(film => {
+              console.log(film)
+              return (
+               <option key={film.episode_id}>{film.title}</option> 
+              )
+            }) }
+          </select>
+        </div>
       </div>
     )
   }
