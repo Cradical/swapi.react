@@ -55,16 +55,11 @@ export default class People extends React.Component {
   showStarship(person){
     const component = this
     return function(event) {
-      console.log(event.target.value)
-      console.log('person: ', person)
-      console.log(starshipsURLs)
       let starshipsURLs = person.starships
-      console.log(starshipsURLs)
       starshipsURLs.map(starship => {
         fetch(starship)
           .then(response => response.json())
           .then(response => {
-            console.log(component.state)
             component.setState({ starships : component.state.starships.concat([response.name]) })
           })
       })
@@ -77,7 +72,6 @@ export default class People extends React.Component {
     const films = this.state.films
     const characters = this.state.characters
     const starships = this.state.starships
-    console.log(starships)
     
     return (
       <div style={{textAlign: 'center'}}>
@@ -85,10 +79,18 @@ export default class People extends React.Component {
         <ul className="people">
           {people.map(person => {
             return(
-            <li onClick={this.showStarship(person)} key={person.url}>{person.name}</li>
+              <li onClick={this.showStarship(person)} key={person.url}>{person.name}</li>
             )}
           )}
         </ul>
+        <div>
+          <h1>Character's Starship:</h1>
+          <ul>{starships.map(ship => {
+            return(
+              <li key={ship}>{ship}</li>
+            )
+          })}</ul>
+        </div>
         <div className="film-list">
           <h2>Select A Movie</h2>
           <select onChange={this.showCharacters}>
