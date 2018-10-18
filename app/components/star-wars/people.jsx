@@ -5,11 +5,13 @@ export default class People extends React.Component {
     super(props);
 
     this.showCharacters = this.showCharacters.bind(this)
+    this.showStarship = this.showStarship.bind(this)
 
     this.state = {
       people: [],
       films: [],
-      characters: []
+      characters: [],
+      starships: []
     };
   }
 
@@ -50,18 +52,41 @@ export default class People extends React.Component {
     })
   }
 
+  showStarship(person){
+    const component = this
+    return function(event) {
+      console.log(event.target.value)
+      console.log('person: ', person)
+      console.log(starshipsURLs)
+      let starshipsURLs = person.starships
+      console.log(starshipsURLs)
+      starshipsURLs.map(starship => {
+        fetch(starship)
+          .then(response => response.json())
+          .then(response => {
+            console.log(component.state)
+            component.setState({ starships : component.state.starships.concat([response.name]) })
+          })
+      })
+    }
+  }
+
   render() {
 
     const people = this.state.people
     const films = this.state.films
     const characters = this.state.characters
+    const starships = this.state.starships
+    console.log(starships)
     
     return (
       <div style={{textAlign: 'center'}}>
         <h1>Star Wars People</h1>
-        <ul>
-          {people.map(person =>
-            <li key={person.url}>{person.name}</li>
+        <ul className="people">
+          {people.map(person => {
+            return(
+            <li onClick={this.showStarship(person)} key={person.url}>{person.name}</li>
+            )}
           )}
         </ul>
         <div className="film-list">
@@ -75,7 +100,7 @@ export default class People extends React.Component {
           </select>
         </div>
         <div>
-          <ul>
+          <ul className="movie-characters">
             {characters.map(character => {
               return (
                 <li key={character}>{character}</li>
