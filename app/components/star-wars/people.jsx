@@ -1,4 +1,5 @@
 import React from 'react';
+import SelectFilms from './selectFilms.jsx';
 
 export default class People extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ export default class People extends React.Component {
   }
 
   showCharacters(event){
+    // debugger
     this.setState({ characters : [] })
     let films = this.state.films
     films.map(film => {
@@ -45,7 +47,7 @@ export default class People extends React.Component {
           fetch(character)
             .then(response => response.json())
             .then(response => {
-              this.setState({ characters : this.state.characters.concat([response.name]) })
+              this.setState({ characters : [ ...this.state.characters, response.name ] })
             })
         })
       }
@@ -53,16 +55,29 @@ export default class People extends React.Component {
   }
 
   showStarship(person){
-    const component = this
-    return function(event) {
+    return (event) => {
+      this.setState({ starships : [] })
       let starshipsURLs = person.starships
-      starshipsURLs.map(starship => {
-        fetch(starship)
-          .then(response => response.json())
-          .then(response => {
-            component.setState({ starships : component.state.starships.concat([response.name]) })
-          })
+      const starshipRequest = starshipsURLs.map(starship => {
+        return fetch(starship).then(response => response.json())
       })
+
+      Promise.all(starshipRequest).then(responses => {
+        console.log('star ship responses', responses, responses.map(({ name }) => name))
+        this.setState({ starships: responses.map(response => response.name) })
+      })
+
+      // return 
+      // debugger
+      // this.setState({ starships : [] })
+      // let starshipsURLs = person.starships
+      // starshipsURLs.map(starship => {
+      //   fetch(starship)
+      //     .then(response => response.json())
+      //     .then(response => {
+      //       this.setState({ starships : [ ...this.state.starships, response.name] })
+      //     })
+      // })
     }
   }
 
@@ -72,7 +87,8 @@ export default class People extends React.Component {
     const films = this.state.films
     const characters = this.state.characters
     const starships = this.state.starships
-    
+    console.log('starships: ', starships)
+
     return (
       <div style={{textAlign: 'center'}}>
         <h1>Star Wars People</h1>
@@ -91,25 +107,7 @@ export default class People extends React.Component {
             )
           })}</ul>
         </div>
-        <div className="film-list">
-          <h2>Select A Movie</h2>
-          <select onChange={this.showCharacters}>
-            { films.map(film => {
-              return (
-               <option key={film.episode_id}>{film.title}</option> 
-              )
-            }) }
-          </select>
-        </div>
-        <div>
-          <ul className="movie-characters">
-            {characters.map(character => {
-              return (
-                <li key={character}>{character}</li>
-              )
-            })}
-          </ul>
-        </div>
+        <SelectFilms films={this.state.films} characters={this.state.characters} showCharacters={ this.showCharacters }/>
       </div>
     )
   }
