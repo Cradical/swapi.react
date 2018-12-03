@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectFilms from './selectFilms.jsx';
+import SelectFilms from './selectFilms.js';
 
 export default class People extends React.Component {
   constructor(props) {
@@ -61,23 +61,9 @@ export default class People extends React.Component {
       const starshipRequest = starshipsURLs.map(starship => {
         return fetch(starship).then(response => response.json())
       })
-
       Promise.all(starshipRequest).then(responses => {
-        console.log('star ship responses', responses, responses.map(({ name }) => name))
         this.setState({ starships: responses.map(response => response.name) })
       })
-
-      // return 
-      // debugger
-      // this.setState({ starships : [] })
-      // let starshipsURLs = person.starships
-      // starshipsURLs.map(starship => {
-      //   fetch(starship)
-      //     .then(response => response.json())
-      //     .then(response => {
-      //       this.setState({ starships : [ ...this.state.starships, response.name] })
-      //     })
-      // })
     }
   }
 
